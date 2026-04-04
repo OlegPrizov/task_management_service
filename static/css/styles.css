@@ -1,0 +1,375 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+.site-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-inner {
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav a {
+    color: #4b5563;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.nav a:hover {
+    color: #111827;
+}
+
+main.container {
+    flex: 1;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #111827;
+}
+
+.page-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.task-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+}
+
+.task-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.task-card-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: #111827;
+}
+
+.task-description {
+    margin: 0 0 16px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.task-meta {
+    display: grid;
+    gap: 10px;
+    color: #374151;
+    font-size: 0.95rem;
+}
+
+.task-meta span {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.badge-todo {
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.badge-in_progress {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.badge-done {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.empty-state {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 40px 24px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+}
+
+.empty-state h2 {
+    margin: 0 0 8px;
+    color: #111827;
+}
+
+.empty-state p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.site-footer {
+    border-top: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.site-footer .container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.site-footer p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.kanban {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.kanban-column {
+    background: #f9fafb;
+    border-radius: 16px;
+    padding: 16px;
+    min-height: 300px;
+}
+
+.kanban-column h2 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+}
+
+.task-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.empty {
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+    .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
+
+    .nav {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .task-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.form-card {
+    max-width: 720px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font: inherit;
+    background: #fff;
+    color: #111827;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.form-error {
+    margin-top: 8px;
+    color: #dc2626;
+    font-size: 0.9rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: #111827;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #1f2937;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+.btn-create {
+    background: #6366f1;
+    color: #ffffff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-create:hover {
+    background: #4f46e5;
+}
+
+.user-greeting {
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.logout-form {
+    margin: 0;
+}
+
+.logout-form button {
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.btn-logout {
+    background: #ef4444;
+}
+
+.btn-logout:hover {
+    background: #dc2626;
+}

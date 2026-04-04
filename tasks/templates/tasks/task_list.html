@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Задачи{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Мои задачи</h1>
+</section>
+
+{% if is_guest %}
+    <div class="empty-state">
+        <h2>Нужно авторизоваться</h2>
+        <p>Чтобы посмотреть задачи, войдите в систему.</p>
+        <div class="form-actions" style="justify-content: center; margin-top: 20px;">
+            <a href="{% url 'users:login' %}" class="btn btn-primary">Войти</a>
+        </div>
+    </div>
+{% else %}
+    <div class="kanban">
+        <div class="kanban-column">
+            <h2>To Do</h2>
+
+            {% for task in todo_tasks %}
+                <article class="task-card">
+                    <div class="task-card-header">
+                        <h3>{{ task.title }}</h3>
+                        <span class="badge badge-{{ task.status }}">
+                            {{ task.get_status_display }}
+                        </span>
+                    </div>
+
+                    {% if task.description %}
+                        <p class="task-description">{{ task.description }}</p>
+                    {% endif %}
+
+                    <div class="task-meta">
+                        <div><span>Создатель:</span> {{ task.creator.username }}</div>
+
+                        {% if task.project %}
+                            <div><span>Проект:</span> {{ task.project.name }}</div>
+                        {% endif %}
+
+                        {% if task.due_date %}
+                            <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
+                        {% endif %}
+                    </div>
+                </article>
+            {% empty %}
+                <p class="empty">Нет задач</p>
+            {% endfor %}
+        </div>
+
+        <div class="kanban-column">
+            <h2>In Progress</h2>
+
+            {% for task in in_progress_tasks %}
+                <article class="task-card">
+                    <div class="task-card-header">
+                        <h3>{{ task.title }}</h3>
+                        <span class="badge badge-{{ task.status }}">
+                            {{ task.get_status_display }}
+                        </span>
+                    </div>
+
+                    {% if task.description %}
+                        <p class="task-description">{{ task.description }}</p>
+                    {% endif %}
+
+                    <div class="task-meta">
+                        <div><span>Создатель:</span> {{ task.creator.username }}</div>
+
+                        {% if task.project %}
+                            <div><span>Проект:</span> {{ task.project.name }}</div>
+                        {% endif %}
+
+                        {% if task.due_date %}
+                            <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
+                        {% endif %}
+                    </div>
+                </article>
+            {% empty %}
+                <p class="empty">Нет задач</p>
+            {% endfor %}
+        </div>
+
+        <div class="kanban-column">
+            <h2>Done</h2>
+
+            {% for task in done_tasks %}
+                <article class="task-card">
+                    <div class="task-card-header">
+                        <h3>{{ task.title }}</h3>
+                        <span class="badge badge-{{ task.status }}">
+                            {{ task.get_status_display }}
+                        </span>
+                    </div>
+
+                    {% if task.description %}
+                        <p class="task-description">{{ task.description }}</p>
+                    {% endif %}
+
+                    <div class="task-meta">
+                        <div><span>Создатель:</span> {{ task.creator.username }}</div>
+
+                        {% if task.project %}
+                            <div><span>Проект:</span> {{ task.project.name }}</div>
+                        {% endif %}
+
+                        {% if task.due_date %}
+                            <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
+                        {% endif %}
+                    </div>
+                </article>
+            {% empty %}
+                <p class="empty">Нет задач</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
