@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Создать задачу{% endblock %}
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block content %}
 <section class="page-header">
-    <h1>Создание задачи</h1>
-    <p>Заполните поля ниже, чтобы добавить новую задачу.</p>
+    <h1>{{ page_title }}</h1>
 </section>
 
 <div class="form-card">
@@ -26,8 +25,13 @@
         {% endfor %}
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Создать задачу</button>
-            <a href="{% url 'tasks:list' %}" class="btn btn-secondary">Отмена</a>
+            <button type="submit" class="btn btn-primary">{{ button_text }}</button>
+
+            {% if task %}
+                <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-secondary">Отмена</a>
+            {% else %}
+                <a href="{% url 'tasks:list' %}" class="btn btn-secondary">Отмена</a>
+            {% endif %}
         </div>
     </form>
 </div>

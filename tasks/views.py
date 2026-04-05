@@ -1,11 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from django.contrib.auth.decorators import login_required
-
-
-from django.shortcuts import render
-from .models import Task
-from users.models import User
+from django.db.models import Q
 
 
 def task_list(request):
@@ -57,4 +53,34 @@ def task_create(request):
     else:
         form = TaskCreateForm()
 
-    return render(request, 'tasks/task_form.html', {'form': form})
+    return render(request, 'tasks/task_form.html', {'form': form, 'button_text': 'Создать задачу',})
+
+@login_required
+def task_detail(request, pk):
+    task = get_object_or_404(
+    Task.objects.filter(Q(executor=request.user) | Q(creator=request.user)),
+    pk=pk,
+)
+    return render(request, 'tasks/task_detail.html', {'task': task})
+
+@login_required
+def task_update(request, pk):
+    task = get_object_or_404(
+    Task.objects.filter(Q(executor=request.user) | Q(creator=request.user)),
+    pk=pk,
+)
+
+    if request.method == 'POST':
+        form = TaskCreateForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('tasks:detail', pk=task.pk)
+    else:
+        form = TaskCreateForm(instance=task)
+
+    return render(request, 'tasks/task_form.html', {
+        'form': form,
+        'task': task,
+        'page_title': 'Редактирование задачи',
+        'button_text': 'Сохранить изменения',
+    })

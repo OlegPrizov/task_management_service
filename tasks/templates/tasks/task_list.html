@@ -44,6 +44,10 @@
                             <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
                         {% endif %}
                     </div>
+                    <div class="task-actions">
+                        <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-secondary btn-small">Открыть</a>
+                        <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-primary btn-small">Редактировать</a>
+                    </div>
                 </article>
             {% empty %}
                 <p class="empty">Нет задач</p>
@@ -77,6 +81,10 @@
                             <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
                         {% endif %}
                     </div>
+                                        <div class="task-actions">
+                        <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-secondary btn-small">Открыть</a>
+                        <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-primary btn-small">Редактировать</a>
+                    </div>
                 </article>
             {% empty %}
                 <p class="empty">Нет задач</p>
@@ -109,6 +117,10 @@
                         {% if task.due_date %}
                             <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
                         {% endif %}
+                    </div>
+                                        <div class="task-actions">
+                        <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-secondary btn-small">Открыть</a>
+                        <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-primary btn-small">Редактировать</a>
                     </div>
                 </article>
             {% empty %}

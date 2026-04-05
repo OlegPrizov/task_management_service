@@ -340,7 +340,7 @@ main.container {
 }
 .btn-create {
     background: #6366f1;
-    color: #ffffff;
+    color: #ffffff !important;
     padding: 8px 14px;
     border-radius: 10px;
     font-weight: 600;
@@ -372,4 +372,48 @@ main.container {
 
 .btn-logout:hover {
     background: #dc2626;
+}
+
+.detail-card {
+    max-width: 820px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-row:last-of-type {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 700;
+    color: #374151;
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.btn-small {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+    .detail-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
 }
