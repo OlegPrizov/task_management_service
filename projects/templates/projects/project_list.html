@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Проекты{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Проекты</h1>
+    <p>Проекты, в которых вы участвуете</p>
+</section>
+
+<div class="task-grid">
+    {% for project in projects %}
+        <div class="task-card">
+            <div class="task-card-header">
+                <h2>{{ project.name }}</h2>
+            </div>
+
+            <p class="task-description">
+                {% if project.description %}
+                    {{ project.description }}
+                {% else %}
+                    <span class="empty">Нет описания</span>
+                {% endif %}
+            </p>
+
+            <div class="task-meta">
+                <div>
+                    <span>Владелец:</span> {{ project.owner.username }}
+                </div>
+
+                <div>
+                    <span>Создан:</span> {{ project.created_at|date:"d.m.Y" }}
+                </div>
+
+                <div>
+                    <span>Ваших задач:</span> {{ project.user_tasks_count }}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty-state">
+            <h2>Нет проектов</h2>
+            <p>Вы пока не участвуете ни в одном проекте</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Удаление комментария{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Удаление комментария</h1>
+    <p>Задача: {{ task.title }}</p>
+</section>
+
+<div class="form-card">
+    <p>Вы действительно хотите удалить этот комментарий?</p>
+
+    <div class="comment-card" style="margin: 20px 0 0;">
+        <div class="comment-text">
+            {{ comment.text|linebreaks }}
+        </div>
+    </div>
+
+    <form method="post" style="margin-top: 20px;">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Удалить</button>
+            <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

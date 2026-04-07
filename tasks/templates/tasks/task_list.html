@@ -16,6 +16,24 @@
         </div>
     </div>
 {% else %}
+
+    <div class="form-card" style="max-width: 100%; margin-bottom: 24px;">
+        <form method="get" class="task-filter-form">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label for="project">Фильтр по проекту</label>
+                <select name="project" id="project" onchange="this.form.submit()">
+                    <option value="">Все проекты</option>
+                    {% for project in projects %}
+                        <option value="{{ project.id }}"
+                            {% if selected_project_id == project.id|stringformat:"s" %}selected{% endif %}>
+                            {{ project.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+
     <div class="kanban">
         <div class="kanban-column">
             <h2>To Do</h2>
@@ -44,6 +62,7 @@
                             <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
                         {% endif %}
                     </div>
+
                     <div class="task-actions">
                         <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-secondary btn-small">Открыть</a>
                         <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-primary btn-small">Редактировать</a>
@@ -81,7 +100,8 @@
                             <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
                         {% endif %}
                     </div>
-                                        <div class="task-actions">
+
+                    <div class="task-actions">
                         <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-secondary btn-small">Открыть</a>
                         <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-primary btn-small">Редактировать</a>
                     </div>
@@ -118,7 +138,8 @@
                             <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
                         {% endif %}
                     </div>
-                                        <div class="task-actions">
+
+                    <div class="task-actions">
                         <a href="{% url 'tasks:detail' task.pk %}" class="btn btn-secondary btn-small">Открыть</a>
                         <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-primary btn-small">Редактировать</a>
                     </div>
