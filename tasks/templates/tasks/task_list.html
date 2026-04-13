@@ -39,12 +39,21 @@
             <h2>To Do</h2>
 
             {% for task in todo_tasks %}
-                <article class="task-card">
+                <article class="task-card {% if task.is_overdue %}task-card-overdue{% endif %}">
                     <div class="task-card-header">
                         <h3>{{ task.title }}</h3>
-                        <span class="badge badge-{{ task.status }}">
-                            {{ task.get_status_display }}
-                        </span>
+
+                        <div class="task-badges">
+                            {% if task.user_role_label %}
+                                <span class="badge badge-role badge-role-{{ task.user_role_class }}">
+                                    {{ task.user_role_label }}
+                                </span>
+                            {% endif %}
+
+                            <span class="badge badge-{{ task.status }}">
+                                {{ task.get_status_display }}
+                            </span>
+                        </div>
                     </div>
 
                     {% if task.description %}
@@ -59,7 +68,12 @@
                         {% endif %}
 
                         {% if task.due_date %}
-                            <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
+                            <div>
+                                <span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}
+                                {% if task.is_overdue %}
+                                    <span class="badge badge-overdue">Просрочена</span>
+                                {% endif %}
+                            </div>
                         {% endif %}
                     </div>
 
@@ -77,12 +91,21 @@
             <h2>In Progress</h2>
 
             {% for task in in_progress_tasks %}
-                <article class="task-card">
+                <article class="task-card {% if task.is_overdue %}task-card-overdue{% endif %}">
                     <div class="task-card-header">
                         <h3>{{ task.title }}</h3>
-                        <span class="badge badge-{{ task.status }}">
-                            {{ task.get_status_display }}
-                        </span>
+
+                        <div class="task-badges">
+                            {% if task.user_role_label %}
+                                <span class="badge badge-role badge-role-{{ task.user_role_class }}">
+                                    {{ task.user_role_label }}
+                                </span>
+                            {% endif %}
+
+                            <span class="badge badge-{{ task.status }}">
+                                {{ task.get_status_display }}
+                            </span>
+                        </div>
                     </div>
 
                     {% if task.description %}
@@ -97,7 +120,12 @@
                         {% endif %}
 
                         {% if task.due_date %}
-                            <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
+                            <div>
+                                <span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}
+                                {% if task.is_overdue %}
+                                    <span class="badge badge-overdue">Просрочена</span>
+                                {% endif %}
+                            </div>
                         {% endif %}
                     </div>
 
@@ -115,12 +143,21 @@
             <h2>Done</h2>
 
             {% for task in done_tasks %}
-                <article class="task-card">
+                <article class="task-card {% if task.is_overdue %}task-card-overdue{% endif %}">
                     <div class="task-card-header">
                         <h3>{{ task.title }}</h3>
-                        <span class="badge badge-{{ task.status }}">
-                            {{ task.get_status_display }}
-                        </span>
+
+                        <div class="task-badges">
+                            {% if task.user_role_label %}
+                                <span class="badge badge-role badge-role-{{ task.user_role_class }}">
+                                    {{ task.user_role_label }}
+                                </span>
+                            {% endif %}
+
+                            <span class="badge badge-{{ task.status }}">
+                                {{ task.get_status_display }}
+                            </span>
+                        </div>
                     </div>
 
                     {% if task.description %}
@@ -135,7 +172,12 @@
                         {% endif %}
 
                         {% if task.due_date %}
-                            <div><span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}</div>
+                            <div>
+                                <span>Срок:</span> {{ task.due_date|date:"d.m.Y H:i" }}
+                                {% if task.is_overdue %}
+                                    <span class="badge badge-overdue">Просрочена</span>
+                                {% endif %}
+                            </div>
                         {% endif %}
                     </div>
 

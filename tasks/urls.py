@@ -6,6 +6,7 @@ from .views import (
     task_update,
     comment_update,
     comment_delete,
+    task_report_xlsx
 )
 
 app_name = 'tasks'
@@ -17,4 +18,5 @@ urlpatterns = [
     path('<int:pk>/edit/', task_update, name='edit'),
     path('<int:task_pk>/comments/<int:comment_pk>/edit/', comment_update, name='comment_edit'),
     path('<int:task_pk>/comments/<int:comment_pk>/delete/', comment_delete, name='comment_delete'),
+    path('<int:pk>/report/xlsx/', task_report_xlsx, name='report_xlsx'),
 ]

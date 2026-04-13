@@ -14,7 +14,19 @@
         {% for field in form %}
             <div class="form-group">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
+
+                {% if field.name == 'watchers' %}
+                    <div class="watchers-group" id="watchers-group">
+                        {% for checkbox in field %}
+                            <label class="watcher-option" data-user-id="{{ checkbox.data.value }}">
+                                {{ checkbox.tag }}
+                                <span class="watcher-name">{{ checkbox.choice_label }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ field }}
+                {% endif %}
 
                 {% if field.errors %}
                     <div class="form-error">
@@ -35,4 +47,35 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const executorSelect = document.getElementById('{{ form.executor.id_for_label }}');
+    const watcherOptions = document.querySelectorAll('.watcher-option');
+
+    function updateWatchersVisibility() {
+        const executorId = executorSelect ? executorSelect.value : '';
+
+        watcherOptions.forEach(option => {
+            const watcherId = option.dataset.userId;
+            const checkbox = option.querySelector('input[type="checkbox"]');
+
+            if (watcherId === executorId) {
+                option.style.display = 'none';
+
+                if (checkbox) {
+                    checkbox.checked = false;
+                }
+            } else {
+                option.style.display = '';
+            }
+        });
+    }
+
+    if (executorSelect) {
+        executorSelect.addEventListener('change', updateWatchersVisibility);
+        updateWatchersVisibility();
+    }
+});
+</script>
 {% endblock %}

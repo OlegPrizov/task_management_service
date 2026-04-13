@@ -8,7 +8,7 @@
     <p>Подробная информация по задаче.</p>
 </section>
 
-<div class="detail-card">
+<div class="detail-card {% if task.is_overdue %}detail-card-overdue{% endif %}">
     <div class="detail-row">
         <span class="detail-label">Статус</span>
         <span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span>
@@ -42,6 +42,17 @@
     </div>
 
     <div class="detail-row">
+        <span class="detail-label">Наблюдатели</span>
+        <div>
+            {% for watcher in task.watchers.all %}
+                {{ watcher.username }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                <span class="empty">Нет наблюдателей</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="detail-row">
         <span class="detail-label">Проект</span>
         <div>
             {% if task.project %}
@@ -57,6 +68,9 @@
         <div>
             {% if task.due_date %}
                 {{ task.due_date|date:"d.m.Y H:i" }}
+                {% if task.is_overdue %}
+                    <span class="badge badge-overdue">Просрочена</span>
+                {% endif %}
             {% else %}
                 <span class="empty">Не указан</span>
             {% endif %}
@@ -74,38 +88,45 @@
     </div>
 
     <div class="form-actions">
-        <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-primary">Редактировать</a>
+        {% if can_edit %}
+            <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-primary">Редактировать</a>
+        {% endif %}
+
+        <a href="{% url 'tasks:report_xlsx' task.pk %}" class="btn btn-secondary">Скачать отчет XLSX</a>
         <a href="{% url 'tasks:list' %}" class="btn btn-secondary">Назад к задачам</a>
     </div>
 </div>
+
 <section class="comments-section">
     <div class="comments-header">
         <h2>Комментарии</h2>
         <span class="comments-count">{{ task.comments.count }}</span>
     </div>
 
-    <div class="comment-form-card">
-        <form method="post" class="comment-form">
-            {% csrf_token %}
+    {% if can_comment and comment_form %}
+        <div class="comment-form-card">
+            <form method="post" class="comment-form">
+                {% csrf_token %}
 
-            {% for field in comment_form %}
-                <div class="form-group">
-                    {{ field }}
-                    {% if field.errors %}
-                        <div class="form-error">
-                            {{ field.errors }}
-                        </div>
-                    {% endif %}
+                {% for field in comment_form %}
+                    <div class="form-group">
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="form-error">
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="comment-form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Добавить комментарий
+                    </button>
                 </div>
-            {% endfor %}
-
-            <div class="comment-form-actions">
-                <button type="submit" class="btn btn-primary">
-                    Добавить комментарий
-                </button>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+    {% endif %}
 
     <div class="comments-list">
         {% for comment in task.comments.all %}

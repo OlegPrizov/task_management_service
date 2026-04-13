@@ -644,3 +644,57 @@ main.container {
     padding: 14px 16px;
     margin-bottom: 16px;
 }
+
+.watchers-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.watcher-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.watcher-option input[type="checkbox"] {
+    margin: 0;
+    width: 18px;
+    height: 18px;
+}
+
+.task-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.badge-role-creator {
+    background: #e8f0ff;
+    color: #2f5bd1;
+}
+
+.badge-role-executor {
+    background: #eafbf0;
+    color: #1f8f4d;
+}
+
+.badge-role-watcher {
+    background: #f3ecff;
+    color: #7a4bd1;
+}
+
+.task-card-overdue {
+    border-left: 4px solid #e74c3c;
+    background-color: #fff5f5;
+}
+
+.detail-card-overdue {
+    border-left: 4px solid #e74c3c;
+    background-color: #fff5f5;
+}
