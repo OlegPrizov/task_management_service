@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Отчёт по исполнителям</h1>
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Исполнитель</th>
+            <th>Всего</th>
+            <th>К выполнению</th>
+            <th>В работе</th>
+            <th>Выполнено</th>
+            <th>Просрочено</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in report_data %}
+        <tr>
+            <td>{{ item.user.username }}</td>
+            <td>{{ item.total }}</td>
+            <td>{{ item.todo }}</td>
+            <td class="in-progress">{{ item.in_progress }}</td>
+            <td class="completed">{{ item.completed }}</td>
+            <td class="overdue">{{ item.overdue }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

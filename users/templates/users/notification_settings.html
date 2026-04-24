@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>Telegram</h1>
+
+        {% if user.telegram_chat_id %}
+            <p>✅ Telegram подключен</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="action" value="telegram_reconnect" class="btn-create">
+                    Перепривязать
+                </button>
+
+                <button type="submit" name="action" value="telegram_disconnect" class="btn-create btn-logout">
+                    Отвязать
+                </button>
+            </form>
+
+        {% else %}
+            <p>Откройте бота и отправьте команду:</p>
+
+            <div class="copy-block">
+                <code id="tg-command">/start {{ telegram_link_code.code }}</code>
+                <button onclick="copyCommand()" class="btn-create">Скопировать</button>
+            </div>
+
+            <p>
+                <a href="https://t.me/task_management_service_bot" target="_blank">
+                    Открыть бота
+                </a>
+            </p>
+        {% endif %}
+
+        {% if user.vk_user_id %}
+            <p>✅ VK подключен</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="action" value="vk_reconnect" class="btn-create">
+                    Перепривязать
+                </button>
+
+                <button type="submit" name="action" value="vk_disconnect" class="btn-create btn-logout">
+                    Отвязать
+                </button>
+            </form>
+        {% else %}
+            <p>Откройте VK-бота и отправьте код:</p>
+
+            <div class="copy-block">
+                <code id="vk-command">{{ vk_link_code.code }}</code>
+                <button type="button" onclick="copyCommand('vk-command')" class="btn-create">
+                    Скопировать
+                </button>
+            </div>
+
+            <p>
+                <a href="https://vk.com/club237972255" target="_blank">
+                    Открыть VK-бота
+                </a>
+            </p>
+        {% endif %}
+
+    </div>
+
+<script>
+function copyCommand() {
+    const text = document.getElementById('tg-command').innerText;
+
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Скопировано!');
+    });
+}
+</script>
+
+{% endblock %}

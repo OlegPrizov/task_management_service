@@ -16,6 +16,7 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     due_date = models.DateTimeField(null=True, blank=True)
+    overdue_notified_at = models.DateTimeField(null=True, blank=True)
 
     status = models.CharField(
         max_length=20,

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,7 +19,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tasks',
     'users',
-    'projects'
+    'projects',
+    'telegram_integration',
+    'vk_integration',
+    'reports'
 ]
 
 MIDDLEWARE = [
@@ -74,7 +78,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -93,3 +97,17 @@ STATICFILES_DIRS = [
 LOGIN_REDIRECT_URL = '/tasks/'
 LOGOUT_REDIRECT_URL = '/tasks/'
 LOGIN_URL = '/users/login/'
+
+TELEGRAM_BOT_TOKEN = '8676363348:AAFaJVjBdVLgPoOBTfCHXN-q-3dGa5q2LVg'
+VK_GROUP_TOKEN = 'vk1.a.Ot4IF3crcWcXPW7vOV3DpLPIWqir5910bQ6p2uV5TtgbovcYpqqD9ljUmzkdjyXxBaHOb5l7rKy3Mq5SmwXHzoIHBJ0AbUVvmuz5XzQ7DY4coGHNSg0YKaDS7-PUBj-fsGrIsPuege0CLhilSEpGGelYf69u7qYvJPQllaEivqz8QT01B--p7nZsDf-iLY6wo91i3RzuKqvLe7dEmOmZWg'
+VK_GROUP_ID = 237972255 
+
+CELERY_BEAT_SCHEDULE = {
+    'notify-overdue-tasks-every-10-minutes': {
+        'task': 'tasks.tasks.notify_overdue_tasks',
+        'schedule': crontab(minute='*/10'),
+    },
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
