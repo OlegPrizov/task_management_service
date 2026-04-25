@@ -752,3 +752,10 @@ main.container {
 .in-progress {
     color: #f39c12;
 }
+
+.page-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}

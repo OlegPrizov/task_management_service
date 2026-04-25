@@ -4,8 +4,14 @@
 
 {% block content %}
 <section class="page-header">
-    <h1>Проекты</h1>
-    <p>Проекты, в которых вы участвуете</p>
+    <div class="page-header-top">
+        <h1>Проекты</h1>
+        <a href="{% url 'projects:create' %}" class="btn btn-create">
+            + Новый проект
+        </a>
+    </div>
+
+    <p>Проекты, в которых вы участвуете или которые вы создали</p>
 </section>
 
 <div class="task-grid">
@@ -24,18 +30,18 @@
             </p>
 
             <div class="task-meta">
-                <div>
-                    <span>Владелец:</span> {{ project.owner.username }}
-                </div>
-
-                <div>
-                    <span>Создан:</span> {{ project.created_at|date:"d.m.Y" }}
-                </div>
-
-                <div>
-                    <span>Ваших задач:</span> {{ project.user_tasks_count }}
-                </div>
+                <div><span>Владелец:</span> {{ project.owner.username }}</div>
+                <div><span>Создан:</span> {{ project.created_at|date:"d.m.Y" }}</div>
+                <div><span>Ваших задач:</span> {{ project.user_tasks_count }}</div>
             </div>
+
+            {% if project.owner == request.user %}
+                <div class="task-actions">
+                    <a href="{% url 'projects:edit' project.pk %}" class="btn btn-secondary btn-small">
+                        Редактировать
+                    </a>
+                </div>
+            {% endif %}
         </div>
     {% empty %}
         <div class="empty-state">

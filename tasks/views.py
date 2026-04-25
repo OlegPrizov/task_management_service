@@ -156,43 +156,6 @@ def task_create(request):
 
     return render(request, 'tasks/task_form.html', {'form': form, 'button_text': 'Создать задачу',})
 
-# @login_required
-# def task_detail(request, pk):
-#     task = get_object_or_404(
-#         Task.objects.select_related(
-#             'creator', 'executor', 'project'
-#         ).prefetch_related(
-#             'watchers',
-#             'comments__user'
-#         ).distinct(),
-#         Q(pk=pk) & (
-#             Q(executor=request.user) |
-#             Q(creator=request.user) |
-#             Q(watchers=request.user)
-#         )
-#     )
-
-#     can_edit = request.user == task.creator or request.user == task.executor
-
-#     if request.method == 'POST':
-#         if not can_edit:
-#             return redirect('tasks:detail', pk=task.pk)
-
-#         comment_form = CommentCreateForm(request.POST)
-#         if comment_form.is_valid():
-#             comment = comment_form.save(commit=False)
-#             comment.task = task
-#             comment.user = request.user
-#             comment.save()
-#             return redirect('tasks:detail', pk=task.pk)
-#     else:
-#         comment_form = CommentCreateForm() if can_edit else None
-
-#     return render(request, 'tasks/task_detail.html', {
-#         'task': task,
-#         'comment_form': comment_form,
-#         'can_edit': can_edit,
-#     })
 @login_required
 def task_detail(request, pk):
     task = get_object_or_404(

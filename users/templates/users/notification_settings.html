@@ -23,12 +23,16 @@
 
             <div class="copy-block">
                 <code id="tg-command">/start {{ telegram_link_code.code }}</code>
-                <button onclick="copyCommand()" class="btn-create">Скопировать</button>
+                <button type="button" onclick="copyCommand('tg-command')" class="btn-create">
+                    Скопировать
+                </button>
             </div>
 
             <p>
-                <a href="https://t.me/task_management_service_bot" target="_blank">
-                    Открыть бота
+                <a href="https://t.me/task_management_service_bot"
+                target="_blank"
+                class="btn btn-secondary">
+                    Открыть Telegram бота
                 </a>
             </p>
         {% endif %}
@@ -57,7 +61,9 @@
             </div>
 
             <p>
-                <a href="https://vk.com/club237972255" target="_blank">
+                <a href="https://vk.com/club237972255"
+                target="_blank"
+                class="btn btn-secondary">
                     Открыть VK-бота
                 </a>
             </p>
@@ -66,8 +72,8 @@
     </div>
 
 <script>
-function copyCommand() {
-    const text = document.getElementById('tg-command').innerText;
+function copyCommand(elementId) {
+    const text = document.getElementById(elementId).innerText;
 
     navigator.clipboard.writeText(text).then(() => {
         alert('Скопировано!');
