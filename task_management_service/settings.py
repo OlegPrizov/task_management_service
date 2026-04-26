@@ -1,14 +1,17 @@
+from dotenv import load_dotenv
 import os
 from pathlib import Path
 from celery.schedules import crontab
 
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-sj_)y5hp!iw71gb%a21k)y_m@^@thu_sn2)68yfb(@dd5hd2)r'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -98,9 +101,9 @@ LOGIN_REDIRECT_URL = '/tasks/'
 LOGOUT_REDIRECT_URL = '/tasks/'
 LOGIN_URL = '/users/login/'
 
-TELEGRAM_BOT_TOKEN = '8676363348:AAFaJVjBdVLgPoOBTfCHXN-q-3dGa5q2LVg'
-VK_GROUP_TOKEN = 'vk1.a.Ot4IF3crcWcXPW7vOV3DpLPIWqir5910bQ6p2uV5TtgbovcYpqqD9ljUmzkdjyXxBaHOb5l7rKy3Mq5SmwXHzoIHBJ0AbUVvmuz5XzQ7DY4coGHNSg0YKaDS7-PUBj-fsGrIsPuege0CLhilSEpGGelYf69u7qYvJPQllaEivqz8QT01B--p7nZsDf-iLY6wo91i3RzuKqvLe7dEmOmZWg'
-VK_GROUP_ID = 237972255 
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+VK_GROUP_TOKEN = os.getenv("VK_GROUP_TOKEN")
+VK_GROUP_ID = int(os.getenv("VK_GROUP_ID", 0))
 
 CELERY_BEAT_SCHEDULE = {
     'notify-overdue-tasks-every-10-minutes': {
@@ -109,5 +112,5 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
