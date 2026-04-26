@@ -1,82 +1,110 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
-        <h1>Telegram</h1>
 
-        {% if user.telegram_chat_id %}
-            <p>✅ Telegram подключен</p>
+<section class="page-header">
+    <h1>Уведомления</h1>
+    <p>Подключите Telegram или VK, чтобы получать уведомления</p>
+</section>
 
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" name="action" value="telegram_reconnect" class="btn-create">
-                    Перепривязать
-                </button>
+<div class="task-grid">
 
-                <button type="submit" name="action" value="telegram_disconnect" class="btn-create btn-logout">
-                    Отвязать
-                </button>
-            </form>
-
-        {% else %}
-            <p>Откройте бота и отправьте команду:</p>
-
-            <div class="copy-block">
-                <code id="tg-command">/start {{ telegram_link_code.code }}</code>
-                <button type="button" onclick="copyCommand('tg-command')" class="btn-create">
-                    Скопировать
-                </button>
-            </div>
-
-            <p>
-                <a href="https://t.me/task_management_service_bot"
-                target="_blank"
-                class="btn btn-secondary">
-                    Открыть Telegram бота
-                </a>
-            </p>
-        {% endif %}
-
-        {% if user.vk_user_id %}
-            <p>✅ VK подключен</p>
-
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" name="action" value="vk_reconnect" class="btn-create">
-                    Перепривязать
-                </button>
-
-                <button type="submit" name="action" value="vk_disconnect" class="btn-create btn-logout">
-                    Отвязать
-                </button>
-            </form>
-        {% else %}
-            <p>Откройте VK-бота и отправьте код:</p>
-
-            <div class="copy-block">
-                <code id="vk-command">{{ vk_link_code.code }}</code>
-                <button type="button" onclick="copyCommand('vk-command')" class="btn-create">
-                    Скопировать
-                </button>
-            </div>
-
-            <p>
-                <a href="https://vk.com/club237972255"
-                target="_blank"
-                class="btn btn-secondary">
-                    Открыть VK-бота
-                </a>
-            </p>
-        {% endif %}
-
+<div class="task-card">
+    <div class="task-card-header">
+        <h2>Telegram</h2>
     </div>
 
+    {% if user.telegram_chat_id %}
+        <p class="task-description">✅ Telegram подключен</p>
+
+        <form method="post" class="form-actions">
+            {% csrf_token %}
+            <button type="submit" name="action" value="telegram_reconnect" class="btn btn-secondary">
+                Перепривязать
+            </button>
+            <button type="submit" name="action" value="telegram_disconnect" class="btn btn-danger">
+                Отвязать
+            </button>
+        </form>
+    {% else %}
+        <p class="task-description">
+            Скопируйте команду и отправьте её боту, после обновите страницу
+        </p>
+
+        <code id="tg-command">/start {{ telegram_link_code.code }}</code>
+
+        <div class="form-actions">
+            <button type="button"
+                    onclick="copyCommand('tg-command', this)"
+                    class="btn btn-create btn-small">
+                Скопировать
+            </button>
+        </div>
+
+        <div class="form-actions">
+            <a href="https://t.me/task_management_service_bot"
+               target="_blank"
+               class="btn btn-secondary">
+                Открыть Telegram бота
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="task-card">
+    <div class="task-card-header">
+        <h2>VK</h2>
+    </div>
+
+    {% if user.vk_user_id %}
+        <p class="task-description">✅ VK подключен</p>
+
+        <form method="post" class="form-actions">
+            {% csrf_token %}
+            <button type="submit" name="action" value="vk_reconnect" class="btn btn-secondary">
+                Перепривязать
+            </button>
+            <button type="submit" name="action" value="vk_disconnect" class="btn btn-danger">
+                Отвязать
+            </button>
+        </form>
+    {% else %}
+        <p class="task-description">
+            Скопируйте код и отправьте его боту, после обновите страницу
+        </p>
+
+        <code id="vk-command">{{ vk_link_code.code }}</code>
+
+        <div class="form-actions">
+            <button type="button"
+                    onclick="copyCommand('vk-command', this)"
+                    class="btn btn-create btn-small">
+                Скопировать
+            </button>
+        </div>
+
+        <div class="form-actions">
+            <a href="https://vk.com/club237972255"
+               target="_blank"
+               class="btn btn-secondary">
+                Открыть VK-бота
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+</div>
+
 <script>
-function copyCommand(elementId) {
+function copyCommand(elementId, button) {
     const text = document.getElementById(elementId).innerText;
 
     navigator.clipboard.writeText(text).then(() => {
-        alert('Скопировано!');
+        const original = button.innerText;
+        button.innerText = "Скопировано!";
+        setTimeout(() => {
+            button.innerText = original;
+        }, 1500);
     });
 }
 </script>

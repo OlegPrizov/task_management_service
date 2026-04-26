@@ -5,12 +5,13 @@ from .models import Task, Comment
 class TaskCreateForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['title', 'description', 'due_date', 'status', 'executor', 'watchers', 'project']
+        fields = ['title', 'description', 'due_date', 'priority','status', 'executor', 'watchers', 'project']
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Введите название задачи'}),
             'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Описание задачи'}),
             'due_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'watchers': forms.CheckboxSelectMultiple(),
+            'priority': forms.Select(),
         }
     
     def __init__(self, *args, **kwargs):
@@ -35,6 +36,14 @@ class TaskCreateForm(forms.ModelForm):
             self.add_error('watchers', 'Исполнитель задачи не может быть наблюдателем.')
 
         return cleaned_data
+
+class TaskUpdateForm(TaskCreateForm):
+    class Meta(TaskCreateForm.Meta):
+        fields = TaskCreateForm.Meta.fields + ['is_archived']
+        widgets = {
+            **TaskCreateForm.Meta.widgets,
+            'is_archived': forms.CheckboxInput(),
+        }
 
 class CommentCreateForm(forms.ModelForm):
     class Meta:

@@ -9,6 +9,11 @@ class Task(models.Model):
         IN_PROGRESS = 'in_progress', 'In Progress'
         DONE = 'done', 'Done'
 
+    class Priority(models.TextChoices):
+        LOW = 'low', 'Низкий'
+        MEDIUM = 'medium', 'Средний'
+        HIGH = 'high', 'Высокий'
+
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 
@@ -22,6 +27,12 @@ class Task(models.Model):
         max_length=20,
         choices=Status.choices,
         default=Status.TODO
+    )
+
+    priority = models.CharField(
+        max_length=10,
+        choices=Priority.choices,
+        default=Priority.MEDIUM
     )
 
     creator = models.ForeignKey(
@@ -52,6 +63,13 @@ class Task(models.Model):
         blank=True,
         related_name='tasks'
     )
+
+    is_archived = models.BooleanField(
+    default=False,
+    verbose_name='В архиве'
+    )
+
+    archived_at = models.DateTimeField(null=True, blank=True)
 
     @property
     def is_overdue(self):

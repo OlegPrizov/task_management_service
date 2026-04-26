@@ -15,6 +15,25 @@
     </div>
 
     <div class="detail-row">
+        <span class="detail-label">Приоритет</span>
+        <span class="badge badge-priority-{{ task.priority }}">
+            {{ task.get_priority_display }}
+        </span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label">Архив</span>
+            {% if task.is_archived %}
+                <span class="badge badge-archived">В архиве</span>
+                {% if task.archived_at %}
+                    <span class="empty">с {{ task.archived_at|date:"d.m.Y H:i" }}</span>
+                {% endif %}
+            {% else %}
+                <span class="badge badge-active">Активная</span>
+            {% endif %}
+    </div>
+
+    <div class="detail-row">
         <span class="detail-label">Описание</span>
         <div>
             {% if task.description %}

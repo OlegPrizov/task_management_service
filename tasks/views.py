@@ -3,13 +3,15 @@ from .models import Task, Comment, TaskChangeLog
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .forms import TaskCreateForm, CommentCreateForm
+from .forms import TaskCreateForm, CommentCreateForm, TaskUpdateForm
 from projects.models import Project
 from io import BytesIO
 from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
+from django.db.models import Case, When, IntegerField
+from django.db.models import F
 
 
 def format_field_value(field_name, value):
@@ -63,6 +65,7 @@ def log_watchers_changes(task, old_watchers, changed_by):
             new_value=new_value,
         )
 
+@login_required
 def task_list(request):
     if not request.user.is_authenticated:
         return render(request, 'tasks/task_list.html', {
@@ -81,6 +84,20 @@ def task_list(request):
         'watchers',
     ).distinct()
 
+    tasks = tasks.annotate(
+        priority_order=Case(
+            When(priority='high', then=3),
+            When(priority='medium', then=2),
+            When(priority='low', then=1),
+            output_field=IntegerField(),
+        )
+    ).order_by(
+        'is_archived',
+        '-priority_order',
+        F('due_date').asc(nulls_last=True),
+        '-created_at'
+    )
+
     user_projects = Project.objects.filter(
         Q(tasks__executor=request.user) |
         Q(tasks__creator=request.user) |
@@ -88,9 +105,13 @@ def task_list(request):
     ).distinct().order_by('name')
 
     selected_project_id = request.GET.get('project')
+    selected_priority = request.GET.get('priority')
 
     if selected_project_id:
         tasks = tasks.filter(project_id=selected_project_id)
+    
+    if selected_priority:
+        tasks = tasks.filter(priority=selected_priority)
 
     todo_tasks = list(tasks.filter(status='todo'))
     in_progress_tasks = list(tasks.filter(status='in_progress'))
@@ -118,12 +139,14 @@ def task_list(request):
         'done_tasks': done_tasks,
         'projects': user_projects,
         'selected_project_id': selected_project_id,
+        'selected_priority': selected_priority,
+        'priority_choices': Task.Priority.choices,
     })
 
 @login_required
 def task_create(request):
     if request.method == 'POST':
-        form = TaskCreateForm(request.POST)
+        form = TaskCreateForm(request.POST) ## исправить
         if form.is_valid():
             task = form.save(commit=False)
             task.creator = request.user
@@ -208,7 +231,7 @@ def task_update(request, pk):
     if request.method == 'POST':
         old_task = Task.objects.get(pk=task.pk)
         old_watchers = list(task.watchers.all())
-        form = TaskCreateForm(request.POST, instance=task)
+        form = TaskUpdateForm(request.POST, instance=task, user=request.user)
         if form.is_valid():
             updated_task = form.save()
             log_task_changes(updated_task, old_task, request.user)
@@ -216,7 +239,7 @@ def task_update(request, pk):
             return redirect('tasks:detail', pk=task.pk)
         
     else:
-        form = TaskCreateForm(instance=task, user=request.user)
+        form = TaskUpdateForm(instance=task, user=request.user)
 
     return render(request, 'tasks/task_form.html', {
         'form': form,

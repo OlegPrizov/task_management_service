@@ -13,19 +13,29 @@
 
         {% for field in form %}
             <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
 
-                {% if field.name == 'watchers' %}
-                    <div class="watchers-group" id="watchers-group">
-                        {% for checkbox in field %}
-                            <label class="watcher-option" data-user-id="{{ checkbox.data.value }}">
-                                {{ checkbox.tag }}
-                                <span class="watcher-name">{{ checkbox.choice_label }}</span>
-                            </label>
-                        {% endfor %}
-                    </div>
+                {% if field.name == 'is_archived' %}
+                    <label class="watcher-option">
+                        {{ field }}
+                        <span>Переместить задачу в архив</span>
+                    </label>
+
                 {% else %}
-                    {{ field }}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+                    {% if field.name == 'watchers' %}
+                        <div class="watchers-group" id="watchers-group">
+                            {% for checkbox in field %}
+                                <label class="watcher-option" data-user-id="{{ checkbox.data.value }}">
+                                    {{ checkbox.tag }}
+                                    <span class="watcher-name">{{ checkbox.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+
                 {% endif %}
 
                 {% if field.errors %}
