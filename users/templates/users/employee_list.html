@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Сотрудники</h1>
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Отдел</th>
+            <th>Telegram</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for employee in employees %}
+        <tr>
+            <td>
+                {% if employee.last_name or employee.first_name %}
+                    {{ employee.last_name }}
+                    {{ employee.first_name }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+            <td>
+                {{ employee.username }}
+            </td>
+
+            <td>
+                {{ employee.email }}
+            </td>
+
+            <td>
+                {% if employee.department %}
+                    {{ employee.department.name }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+            <td>
+                {% if employee.telegram_username %}
+                    @{{ employee.telegram_username }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">
+                Сотрудников пока нет
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

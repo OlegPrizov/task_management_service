@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import notification_settings
+from .views import notification_settings, ProfileView, EmployeeListView
 
 app_name = 'users'
 
@@ -16,4 +16,6 @@ urlpatterns = [
         name='logout'
     ),
     path('notifications/', notification_settings, name='notification_settings'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('employees/', EmployeeListView.as_view(), name='employee_list'),
 ]

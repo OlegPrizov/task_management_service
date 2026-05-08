@@ -2,8 +2,10 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView, ListView
 
-from .models import TelegramLinkCode, VkLinkCode
+from .models import TelegramLinkCode, VkLinkCode, User
 
 
 @login_required
@@ -94,3 +96,20 @@ def notification_settings(request):
         'telegram_link_code': telegram_link_code,
         'vk_link_code': vk_link_code,
     })
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    template_name = 'users/profile.html'
+    context_object_name = 'employee'
+    def get_object(self):
+        return self.request.user
+
+class EmployeeListView(LoginRequiredMixin, ListView):
+    model = User
+    template_name = 'users/employee_list.html'
+    context_object_name = 'employees'
+
+    queryset = User.objects.select_related('department').order_by(
+        'last_name',
+        'first_name',
+        'username',
+    )

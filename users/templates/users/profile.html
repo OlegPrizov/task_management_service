@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Мой профиль</h1>
+
+<div>
+    <p><strong>Username:</strong> {{ employee.username }}</p>
+    <p><strong>Email:</strong> {{ employee.email }}</p>
+
+        <p>
+        <strong>Имя:</strong>
+
+        {% if employee.first_name %}
+            {{ employee.first_name }}
+        {% else %}
+            —
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Фамилия:</strong>
+
+        {% if employee.last_name %}
+            {{ employee.last_name }}
+        {% else %}
+            —
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Отдел:</strong>
+
+        {% if employee.department %}
+            {{ employee.department.name }}
+        {% else %}
+            Не указан
+        {% endif %}
+    </p>
+
+    <p><strong>Дата регистрации:</strong> {{ employee.created_at }}</p>
+</div>
+
+{% endblock %}

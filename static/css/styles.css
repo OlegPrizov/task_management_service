@@ -825,3 +825,66 @@ code {
 .task-card-archived:hover {
     opacity: 0.85;
 }
+
+.user-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.user-menu-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #1f2937;
+}
+
+.user-dropdown {
+    position: absolute;
+    right: 0;
+    top: 42px;
+
+    min-width: 220px;
+
+    background: white;
+    border-radius: 12px;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+
+    padding: 10px 0;
+
+    display: none;
+
+    z-index: 1000;
+}
+
+.user-dropdown.active {
+    display: block;
+}
+
+.user-dropdown a,
+.user-dropdown button {
+    display: block;
+    width: 100%;
+
+    padding: 12px 18px;
+
+    background: none;
+    border: none;
+
+    text-align: left;
+
+    font-size: 15px;
+
+    color: #1f2937;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+    background: #f3f4f6;
+}

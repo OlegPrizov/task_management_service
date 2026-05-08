@@ -6,10 +6,10 @@
             <a href="/tasks/">Задачи</a>
             <a href="/projects/">Проекты</a>
             <a href="/reports/">Отчёты</a>
+
             {% if user.is_authenticated %}
                 <a href="/tasks/create/" class="btn-create">+ Новая задача</a>
-            {% endif %}
-            {% if user.is_authenticated %}
+
                 <a href="{% url 'users:notification_settings' %}" class="btn-create">
                     {% if user.telegram_chat_id %}
                         Настройки уведомлений
@@ -17,14 +17,29 @@
                         Подключить уведомления
                     {% endif %}
                 </a>
-                <span class="user-greeting">Привет, {{ user.username }}</span>
 
-                <form method="post" action="{% url 'users:logout' %}" class="logout-form">
+                <a href="{% url 'users:profile' %}" class="btn-create">
+                    Мой профиль
+                </a>
+
+                <span class="user-greeting">
+                    Привет, {{ user.username }}
+                </span>
+
+                <form method="post"
+                      action="{% url 'users:logout' %}"
+                      class="logout-form">
                     {% csrf_token %}
-                    <button type="submit" class="btn-create btn-logout">Выйти</button>
+                    <button type="submit"
+                            class="btn-create btn-logout">
+                        Выйти
+                    </button>
                 </form>
             {% else %}
-                <a href="{% url 'users:login' %}" class="btn-create">Войти</a>
+                <a href="{% url 'users:login' %}"
+                   class="btn-create">
+                    Войти
+                </a>
             {% endif %}
         </nav>
     </div>
