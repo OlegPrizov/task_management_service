@@ -25,5 +25,22 @@
 
         {% include "includes/footer.html" %}
     </div>
+    <script>
+    const toggle = document.getElementById('user-menu-toggle');
+    const dropdown = document.getElementById('user-dropdown');
+
+    if (toggle && dropdown) {
+
+        toggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            dropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', () => {
+            dropdown.classList.remove('active');
+        });
+
+    }
+</script>
 </body>
 </html>

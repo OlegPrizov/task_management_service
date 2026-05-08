@@ -1,6 +1,8 @@
 <header class="site-header">
     <div class="container header-inner">
-        <a href="/tasks/" class="logo">Task Management Service</a>
+        <a href="/tasks/" class="logo">
+            Task Management Service
+        </a>
 
         <nav class="nav">
             <a href="/tasks/">Задачи</a>
@@ -8,38 +10,57 @@
             <a href="/reports/">Отчёты</a>
 
             {% if user.is_authenticated %}
-                <a href="/tasks/create/" class="btn-create">+ Новая задача</a>
 
-                <a href="{% url 'users:notification_settings' %}" class="btn-create">
-                    {% if user.telegram_chat_id %}
-                        Настройки уведомлений
-                    {% else %}
-                        Подключить уведомления
-                    {% endif %}
+                <a href="/tasks/create/"
+                   class="btn-create">
+                    + Новая задача
                 </a>
 
-                <a href="{% url 'users:profile' %}" class="btn-create">
-                    Мой профиль
-                </a>
+                <div class="user-menu">
 
-                <span class="user-greeting">
-                    Привет, {{ user.username }}
-                </span>
-
-                <form method="post"
-                      action="{% url 'users:logout' %}"
-                      class="logout-form">
-                    {% csrf_token %}
-                    <button type="submit"
-                            class="btn-create btn-logout">
-                        Выйти
+                    <button type="button" class="user-menu-button" id="user-menu-toggle">
+                        Привет, {{ user.username }} ▼
                     </button>
-                </form>
+
+                    <div class="user-dropdown"
+                         id="user-dropdown">
+
+                        <a href="{% url 'users:profile' %}">
+                            Мой профиль
+                        </a>
+
+                        <a href="{% url 'users:employee_list' %}">
+                            Сотрудники
+                        </a>
+
+                        <a href="{% url 'users:notification_settings' %}">
+                            {% if user.telegram_chat_id %}
+                                Настройки уведомлений
+                            {% else %}
+                                Подключить уведомления
+                            {% endif %}
+                        </a>
+
+                        <form method="post"
+                              action="{% url 'users:logout' %}">
+                            {% csrf_token %}
+
+                            <button type="submit">
+                                Выйти
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
             {% else %}
+
                 <a href="{% url 'users:login' %}"
                    class="btn-create">
                     Войти
                 </a>
+
             {% endif %}
         </nav>
     </div>
