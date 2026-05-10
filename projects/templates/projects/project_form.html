@@ -23,11 +23,6 @@
             {% if object %}Сохранить{% else %}Создать{% endif %}
         </button>
 
-        {% if object and object.owner == request.user %}
-            <a href="{% url 'projects:edit' object.pk %}" class="btn btn-secondary">
-                Редактировать
-            </a>
-        {% endif %}
     </div>
 </form>
 {% endblock %}
