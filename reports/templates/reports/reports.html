@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <h1>Отчёт по исполнителям</h1>
+<a href="{% url 'reports:executors_xlsx' %}" class="btn btn-secondary">
+    Скачать отчёт
+</a>
+
 <table class="report-table">
     <thead>
         <tr>
@@ -14,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for item in report_data %}
+        {% for item in users_report %}
         <tr>
             <td>{{ item.user.username }}</td>
             <td>{{ item.total }}</td>
@@ -26,4 +31,385 @@
         {% endfor %}
     </tbody>
 </table>
+
+
+<h1>Отчёт по проектам</h1>
+<a href="{% url 'reports:projects_xlsx' %}" class="btn btn-secondary">
+    Скачать отчёт
+</a>
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Проект</th>
+            <th>Всего</th>
+            <th>К выполнению</th>
+            <th>В работе</th>
+            <th>Выполнено</th>
+            <th>Просрочено</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in projects_report %}
+        <tr>
+            <td>{{ item.project.name }}</td>
+            <td>{{ item.total }}</td>
+            <td>{{ item.todo }}</td>
+            <td class="in-progress">{{ item.in_progress }}</td>
+            <td class="completed">{{ item.completed }}</td>
+            <td class="overdue">{{ item.overdue }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<h1>Отчёт по отделам</h1>
+<a href="{% url 'reports:departments_xlsx' %}" class="btn btn-secondary">
+    Скачать отчёт
+</a>
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Отдел</th>
+            <th>Пользователей</th>
+            <th>Всего задач</th>
+            <th>К выполнению</th>
+            <th>В работе</th>
+            <th>Выполнено</th>
+            <th>Просрочено</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in departments_report %}
+        <tr>
+            <td>{{ item.department.name }}</td>
+            <td>{{ item.users_count }}</td>
+            <td>{{ item.total }}</td>
+            <td>{{ item.todo }}</td>
+            <td class="in-progress">{{ item.in_progress }}</td>
+            <td class="completed">{{ item.completed }}</td>
+            <td class="overdue">{{ item.overdue }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="report-header">
+    <h1>Отчет по нагрузке</h1>
+</div>
+<a href="{% url 'reports:workload_xlsx' %}" class="btn btn-secondary">
+    Скачать отчёт
+</a>
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Исполнитель</th>
+            <th>Отдел</th>
+            <th>Активных задач</th>
+            <th>К выполнению</th>
+            <th>В работе</th>
+            <th>Высокий приоритет</th>
+            <th>Просрочено</th>
+            <th>Нагрузка</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in workload_report %}
+        <tr>
+            <td>{{ item.user.username }}</td>
+
+            <td>{{ item.department }}</td>
+
+            <td>{{ item.active }}</td>
+
+            <td>{{ item.todo }}</td>
+
+            <td class="in-progress">
+                {{ item.in_progress }}
+            </td>
+
+            <td>
+                {{ item.high_priority }}
+            </td>
+
+            <td class="overdue">
+                {{ item.overdue }}
+            </td>
+
+            <td>
+                {% if item.level == "Высокая" %}
+                    <span class="workload-high">
+                        {{ item.level }}
+                    </span>
+
+                {% elif item.level == "Средняя" %}
+                    <span class="workload-medium">
+                        {{ item.level }}
+                    </span>
+
+                {% else %}
+                    <span class="workload-low">
+                        {{ item.level }}
+                    </span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="report-header">
+    <h1>Отчёт по приоритетам</h1>
+</div>
+<a href="{% url 'reports:priority_xlsx' %}" class="btn btn-secondary">
+    Скачать отчёт
+</a>
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Приоритет</th>
+            <th>Всего задач</th>
+            <th>Активных</th>
+            <th>К выполнению</th>
+            <th>В работе</th>
+            <th>Выполнено</th>
+            <th>Просрочено</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in priority_report %}
+        <tr>
+            <td>{{ item.priority_display }}</td>
+            <td>{{ item.total }}</td>
+            <td>{{ item.active }}</td>
+            <td>{{ item.todo }}</td>
+            <td class="in-progress">{{ item.in_progress }}</td>
+            <td class="completed">{{ item.completed }}</td>
+            <td class="overdue">{{ item.overdue }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="chart-container">
+    <canvas id="priorityChart"></canvas>
+</div>
+
+<div class="report-header">
+    <h1>Отчет по скорости команды</h1>
+</div>
+<a href="{% url 'reports:velocity_xlsx' %}" class="btn btn-secondary">
+    Скачать отчёт
+</a>
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Исполнитель</th>
+            <th>Отдел</th>
+            <th>Закрыто за 7 дней</th>
+            <th>Закрыто за 30 дней</th>
+            <th>Всего закрыто</th>
+            <th>Закрыто с просрочкой</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in velocity_report %}
+        <tr>
+            <td>{{ item.user.username }}</td>
+            <td>{{ item.department }}</td>
+            <td class="completed">{{ item.completed_7_days }}</td>
+            <td class="completed">{{ item.completed_30_days }}</td>
+            <td>{{ item.completed_total }}</td>
+            <td class="overdue">{{ item.overdue_completed }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="line-chart-container">
+    <canvas id="velocityChart"></canvas>
+</div>
+
+<div class="report-header">
+    <h1>SLA по исполнителям</h1>
+</div>
+<a href="{% url 'reports:sla_xlsx' %}" class="btn btn-secondary">
+    Скачать отчёт
+</a>
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Исполнитель</th>
+            <th>Отдел</th>
+            <th>Закрыто задач</th>
+            <th>Вовремя</th>
+            <th>С просрочкой</th>
+            <th>SLA</th>
+            <th>Уровень</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in sla_report %}
+        <tr>
+            <td>{{ item.user.username }}</td>
+            <td>{{ item.department }}</td>
+            <td>{{ item.total_completed }}</td>
+            <td class="completed">{{ item.completed_on_time }}</td>
+            <td class="overdue">{{ item.completed_overdue }}</td>
+            <td>{{ item.sla_percent }}%</td>
+
+            <td>
+                {% if item.sla_level == "Высокий" %}
+                    <span class="workload-low">{{ item.sla_level }}</span>
+                {% elif item.sla_level == "Средний" %}
+                    <span class="workload-medium">{{ item.sla_level }}</span>
+                {% else %}
+                    <span class="workload-high">{{ item.sla_level }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="chart-container">
+    <canvas id="slaChart"></canvas>
+</div>
+
+<script>
+    const priorityCtx = document.getElementById('priorityChart');
+
+    new Chart(priorityCtx, {
+        type: 'pie',
+
+        data: {
+            labels: {{ priority_chart_labels|safe }},
+
+            datasets: [{
+                data: {{ priority_chart_data|safe }},
+
+                backgroundColor: [
+                    '#dc2626',
+                    '#f59e0b',
+                    '#16a34a'
+                ],
+
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            responsive: true,
+
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+
+                title: {
+                    display: true,
+                    text: 'Распределение задач по приоритетам'
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    const velocityCtx = document.getElementById('velocityChart');
+
+    if (velocityCtx) {
+        new Chart(velocityCtx, {
+            type: 'line',
+
+            data: {
+                labels: {{ velocity_chart_labels|safe }},
+
+                datasets: [{
+                    label: 'Закрыто задач',
+                    data: {{ velocity_chart_data|safe }},
+                    tension: 0.3,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    fill: false
+                }]
+            },
+
+            options: {
+                responsive: true,
+
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+
+                    title: {
+                        display: true,
+                        text: 'Скорость команды: закрытые задачи за последние 30 дней'
+                    }
+                },
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<script>
+    const slaCtx = document.getElementById('slaChart');
+
+    if (slaCtx) {
+        new Chart(slaCtx, {
+            type: 'pie',
+
+            data: {
+                labels: {{ sla_chart_labels|safe }},
+
+                datasets: [{
+                    data: {{ sla_chart_data|safe }},
+
+                    backgroundColor: [
+                        '#16a34a',
+                        '#dc2626'
+                    ],
+
+                    borderWidth: 1
+                }]
+            },
+
+            options: {
+                responsive: true,
+
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+
+                    title: {
+                        display: true,
+                        text: 'SLA: выполнение задач'
+                    }
+                }
+            }
+        });
+    }
+</script>
+
 {% endblock %}

@@ -65,11 +65,45 @@ class Task(models.Model):
     )
 
     is_archived = models.BooleanField(
-    default=False,
-    verbose_name='В архиве'
+        default=False,
+        verbose_name='В архиве'
+    )
+
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True
     )
 
     archived_at = models.DateTimeField(null=True, blank=True)
+
+    completed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='completed_tasks'
+    )
+
+    def save(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        old_status = None
+        if self.pk:
+            old_status = Task.objects.get(pk=self.pk).status
+        if (
+            self.status == self.Status.DONE
+            and old_status != self.Status.DONE
+        ):
+            self.completed_at = timezone.now()
+
+            if user:
+                self.completed_by = user
+        elif (
+            self.status != self.Status.DONE
+            and old_status == self.Status.DONE
+        ):
+            self.completed_at = None
+            self.completed_by = None
+        super().save(*args, **kwargs)
 
     @property
     def is_overdue(self):

@@ -12,6 +12,7 @@ from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 from django.db.models import Case, When, IntegerField
 from django.db.models import F
+from django.utils import timezone
 
 
 def format_field_value(field_name, value):
@@ -106,12 +107,34 @@ def task_list(request):
 
     selected_project_id = request.GET.get('project')
     selected_priority = request.GET.get('priority')
+    selected_role = request.GET.get('role')
+    selected_overdue = request.GET.get('overdue')
+    search_query = request.GET.get('search')
 
     if selected_project_id:
         tasks = tasks.filter(project_id=selected_project_id)
     
     if selected_priority:
         tasks = tasks.filter(priority=selected_priority)
+    
+    if selected_role == 'creator':
+        tasks = tasks.filter(creator=request.user)
+    elif selected_role == 'executor':
+        tasks = tasks.filter(executor=request.user)
+    elif selected_role == 'watcher':
+        tasks = tasks.filter(watchers=request.user)
+
+    if selected_overdue == '1':
+        tasks = tasks.filter(
+            due_date__lt=timezone.now(),
+            is_archived=False,
+        ).exclude(status='done')
+
+    if search_query:
+        tasks = tasks.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
 
     todo_tasks = list(tasks.filter(status='todo'))
     in_progress_tasks = list(tasks.filter(status='in_progress'))
@@ -119,7 +142,10 @@ def task_list(request):
 
     for task_list_group in (todo_tasks, in_progress_tasks, done_tasks):
         for task in task_list_group:
-            if task.creator_id == request.user.id:
+            if task.creator_id == request.user.id and task.executor_id == request.user.id:
+                task.user_role_label = 'Вы постановщик\nи исполнитель'
+                task.user_role_class = 'creator-executor'
+            elif task.creator_id == request.user.id:
                 task.user_role_label = 'Вы постановщик'
                 task.user_role_class = 'creator'
             elif task.executor_id == request.user.id:
@@ -140,6 +166,9 @@ def task_list(request):
         'projects': user_projects,
         'selected_project_id': selected_project_id,
         'selected_priority': selected_priority,
+        'selected_role': selected_role,
+        'selected_overdue': selected_overdue,
+        'search_query': search_query,
         'priority_choices': Task.Priority.choices,
     })
 
@@ -233,7 +262,9 @@ def task_update(request, pk):
         old_watchers = list(task.watchers.all())
         form = TaskUpdateForm(request.POST, instance=task, user=request.user)
         if form.is_valid():
-            updated_task = form.save()
+            updated_task = form.save(commit=False)
+            updated_task.save(user=request.user)
+            form.save_m2m()
             log_task_changes(updated_task, old_task, request.user)
             log_watchers_changes(updated_task, old_watchers, request.user)
             return redirect('tasks:detail', pk=task.pk)

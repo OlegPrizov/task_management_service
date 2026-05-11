@@ -17,11 +17,26 @@
     </div>
 {% else %}
 
-    <div class="form-card" style="max-width: 100%; margin-bottom: 24px;">
+    {% comment %} <div class="form-card" style="max-width: 100%; margin-bottom: 24px;"> {% endcomment %}
+    <details class="form-card filters-card" style="max-width: 100%; margin-bottom: 24px;">
+        <summary class="filters-toggle">
+            Фильтры
+        </summary>
         <form method="get" class="task-filter-form">
             <div class="form-group" style="margin-bottom: 0;">
+                <label for="search">Поиск</label>
+
+                <input
+                    type="text"
+                    id="search"
+                    name="search"
+                    placeholder="Название или описание"
+                    value="{{ search_query|default_if_none:'' }}"
+                >
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
                 <label for="project">Фильтр по проекту</label>
-                <select name="project" id="project" onchange="this.form.submit()">
+                <select name="project" id="project"> {% comment %} onchange="this.form.submit()" {% endcomment %}
                     <option value="">Все проекты</option>
                     {% for project in projects %}
                         <option value="{{ project.id }}"
@@ -32,8 +47,35 @@
                 </select>
             </div>
             <div class="form-group" style="margin-bottom: 0;">
+                <label for="role">Фильтр по роли</label>
+                <select name="role" id="role"> {% comment %} onchange="this.form.submit()" {% endcomment %}
+                    <option value="">Все роли</option>
+                    <option value="creator" {% if selected_role == 'creator' %}selected{% endif %}>
+                        Я постановщик
+                    </option>
+                    <option value="executor" {% if selected_role == 'executor' %}selected{% endif %}>
+                        Я исполнитель
+                    </option>
+                    <option value="watcher" {% if selected_role == 'watcher' %}selected{% endif %}>
+                        Я наблюдатель
+                    </option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label for="overdue">Просроченные</label>
+
+                <select name="overdue" id="overdue"> {% comment %} onchange="this.form.submit()" {% endcomment %}
+                    <option value="">Все задачи</option>
+
+                    <option value="1"
+                        {% if selected_overdue == '1' %}selected{% endif %}>
+                        Только просроченные
+                    </option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
                 <label for="priority">Фильтр по приоритету</label>
-                <select name="priority" id="priority" onchange="this.form.submit()">
+                <select name="priority" id="priority"> {% comment %} onchange="this.form.submit()" {% endcomment %}
                     <option value="">Все приоритеты</option>
                     {% for value, label in priority_choices %}
                         <option value="{{ value }}"
@@ -43,8 +85,17 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    Применить
+                </button>
+                <a href="{% url 'tasks:list' %}" class="btn btn-secondary">
+                    Сбросить
+                </a>
+            </div>
         </form>
-    </div>
+    {% comment %} </div> {% endcomment %}
+    </details>
 
     <div class="kanban">
         <div class="kanban-column">
@@ -58,7 +109,7 @@
                         <div class="task-badges">
                             {% if task.user_role_label %}
                                 <span class="badge badge-role badge-role-{{ task.user_role_class }}">
-                                    {{ task.user_role_label }}
+                                    {{ task.user_role_label|linebreaksbr }}
                                 </span>
                             {% endif %}
 
@@ -78,6 +129,7 @@
 
                     <div class="task-meta">
                         <div><span>Создатель:</span> {{ task.creator.username }}</div>
+                        <div><span>Исполнитель:</span> {{ task.executor.username }}</div>
 
                         {% if task.project %}
                             <div><span>Проект:</span> {{ task.project.name }}</div>
@@ -114,7 +166,7 @@
                         <div class="task-badges">
                             {% if task.user_role_label %}
                                 <span class="badge badge-role badge-role-{{ task.user_role_class }}">
-                                    {{ task.user_role_label }}
+                                    {{ task.user_role_label|linebreaksbr }}
                                 </span>
                             {% endif %}
 
@@ -134,6 +186,7 @@
 
                     <div class="task-meta">
                         <div><span>Создатель:</span> {{ task.creator.username }}</div>
+                        <div><span>Исполнитель:</span> {{ task.executor.username }}</div>
 
                         {% if task.project %}
                             <div><span>Проект:</span> {{ task.project.name }}</div>
@@ -170,7 +223,7 @@
                         <div class="task-badges">
                             {% if task.user_role_label %}
                                 <span class="badge badge-role badge-role-{{ task.user_role_class }}">
-                                    {{ task.user_role_label }}
+                                    {{ task.user_role_label|linebreaksbr }}
                                 </span>
                             {% endif %}
 
@@ -190,6 +243,7 @@
 
                     <div class="task-meta">
                         <div><span>Создатель:</span> {{ task.creator.username }}</div>
+                        <div><span>Исполнитель:</span> {{ task.executor.username }}</div>
 
                         {% if task.project %}
                             <div><span>Проект:</span> {{ task.project.name }}</div>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="page">
         {% include "includes/header.html" %}
 
@@ -26,21 +27,21 @@
         {% include "includes/footer.html" %}
     </div>
     <script>
-    const toggle = document.getElementById('user-menu-toggle');
-    const dropdown = document.getElementById('user-dropdown');
+        const toggle = document.getElementById('user-menu-toggle');
+        const dropdown = document.getElementById('user-dropdown');
 
-    if (toggle && dropdown) {
+        if (toggle && dropdown) {
 
-        toggle.addEventListener('click', (event) => {
-            event.stopPropagation();
-            dropdown.classList.toggle('active');
-        });
+            toggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                dropdown.classList.toggle('active');
+            });
 
-        document.addEventListener('click', () => {
-            dropdown.classList.remove('active');
-        });
+            document.addEventListener('click', () => {
+                dropdown.classList.remove('active');
+            });
 
-    }
-</script>
+        }
+    </script>
 </body>
 </html>
